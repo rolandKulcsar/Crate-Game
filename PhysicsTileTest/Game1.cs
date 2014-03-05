@@ -96,7 +96,7 @@ namespace PhysicsTileTest
             random = new Random();
             crateList = new List<DrawablePhysicsObject>();
             rainList = new List<DrawablePhysicsObject>();
-            world = new World(new Vector2(0, 1f));
+            world = new World(new Vector2(0, 9.81f));
             camera = new Camera(GraphicsDevice.Viewport);
             back = Content.Load<Texture2D>("Background");
 
