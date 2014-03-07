@@ -25,7 +25,6 @@ using FarseerPhysics.Dynamics;
 // brickshower
 
 
-
 // Bubbles
 // what now?
 // cant use crates here :(
@@ -42,20 +41,18 @@ namespace PhysicsTileTest
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
         Map map;
-        List<DrawablePhysicsObject> crateList;
-        List<DrawablePhysicsObject> rainList;
         KeyboardState prevKeyboardState;
-        Random random;
         World world;
         Player player;
         Camera camera;
         Texture2D back;
-        MouseState prevMouseState, currentMouseState;
         Texture2D speechBubble;
         Texture2D cloud;
         Texture2D hp;
         Vector2 cloudpos = new Vector2(50, 100);
+        CrateManager crateManager;
 
         public Game1() : base()
         {
@@ -93,9 +90,6 @@ namespace PhysicsTileTest
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            random = new Random();
-            crateList = new List<DrawablePhysicsObject>();
-            rainList = new List<DrawablePhysicsObject>();
             world = new World(new Vector2(0, 9.81f));
             camera = new Camera(GraphicsDevice.Viewport);
             back = Content.Load<Texture2D>("Background");
@@ -135,27 +129,9 @@ namespace PhysicsTileTest
                 {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             }, 64);
 
+            crateManager = new CrateManager(world, map.Width);
+            crateManager.Load(Content);
             // TODO: use this.Content to load your game content here
-        }
-
-        private void SpawnBrick()
-        {
-            DrawablePhysicsObject brick;
-            brick = new DrawablePhysicsObject(world, new Vector2(19.0f, 14.0f), 0.1f, false);
-            brick.Position = new Vector2(random.Next(map.Width), 1);
-            brick.Load(Content.Load<Texture2D>("Brick"));
-
-            crateList.Add(brick);
-        }
-
-        private void SpawnCrate(float x)
-        {
-            DrawablePhysicsObject crate;
-            crate = new DrawablePhysicsObject(world, new Vector2(50.0f, 50.0f), 0.1f, false);
-            crate.Position = new Vector2(x, 1);
-            crate.Load(Content.Load<Texture2D>("Crate"));
-
-            crateList.Add(crate);
         }
 
         /// <summary>
@@ -176,18 +152,6 @@ namespace PhysicsTileTest
         {
             // TODO: Add your update logic here
 
-            prevMouseState = currentMouseState;
-            currentMouseState = Mouse.GetState();
-            if (currentMouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
-            {
-                Vector2 worldPosition = Vector2.Transform(new Vector2(currentMouseState.X, currentMouseState.Y), Matrix.Invert(camera.Transform));
-                SpawnCrate(worldPosition.X);
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-            {
-                SpawnBrick();
-            }
-
             // CD
             /*foreach (DrawablePhysicsObject tile in map.Tiles)
             {
@@ -198,6 +162,7 @@ namespace PhysicsTileTest
                 
             player.Update();
             camera.Update(player.Position, map.Width, map.Height);
+            crateManager.Update(camera);
             cloudpos += new Vector2(0.2f, 0f);
 
             world.Step((float)gameTime.ElapsedGameTime.TotalSeconds);
@@ -223,10 +188,7 @@ namespace PhysicsTileTest
                               BlendState.AlphaBlend,
                               null, null, null, null,
                               camera.Transform);
-            foreach (DrawablePhysicsObject crate in crateList)
-            {
-                crate.Draw(spriteBatch);
-            }
+            crateManager.Draw(spriteBatch);
             map.Draw(spriteBatch);
             player.Draw(spriteBatch);
             if(player.Position.X > 200 && player.Position.X < 250)
