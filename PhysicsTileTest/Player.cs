@@ -17,9 +17,6 @@ namespace PhysicsTileTest
         const float jumpInterval = 1f;
         DateTime previousJump;
         KeyboardState prevKeyboardState;
-        /*****************/
-        public DrawablePhysicsObject bullet;
-        /****************/
 
         public Player(World world, Vector2 size, float mass, bool isStatic) : base(world, size, mass, isStatic)
         {
@@ -29,9 +26,6 @@ namespace PhysicsTileTest
             movingVector = new Vector2(3.2f, 0f);
             previousJump = DateTime.Now;
             body.FixedRotation = true;
-
-            //*************/
-            bullet = new DrawablePhysicsObject(world, size, mass, false);
         }
 
         public override void Update()
@@ -55,7 +49,6 @@ namespace PhysicsTileTest
                 Position -= movingVector;
                 body.ApplyLinearImpulse(-movingImpulse);
             }
-
             if (Keyboard.GetState().IsKeyDown(Keys.W) && !prevKeyboardState.IsKeyDown(Keys.W))
             {
                 if ((DateTime.Now - previousJump).TotalSeconds >= jumpInterval)
@@ -64,21 +57,8 @@ namespace PhysicsTileTest
                     previousJump = DateTime.Now;
                 }
             }
-            /**************************************/
-            else if (Keyboard.GetState().IsKeyDown(Keys.S) && prevKeyboardState.IsKeyUp(Keys.S))
-            {
-                Shoot();
-                bullet.Position = Position + new Vector2(64, -32);
-            }
-            /****************************************/
 
             prevKeyboardState = keyboardState;
-        }
-
-        public void Shoot()
-        {
-            bullet.Position = Position + new Vector2(64, -32);
-            bullet.body.ApplyLinearImpulse(new Vector2(25f, 0f));
         }
     }
 }

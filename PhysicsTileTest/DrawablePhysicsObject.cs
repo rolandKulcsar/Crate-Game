@@ -21,7 +21,7 @@ namespace PhysicsTileTest
         protected const float unitToPixel = 100.0f;
         protected const float pixelToUnit = 1 / unitToPixel;
 
-        public Body body;
+        protected Body body;
         public Vector2 Position
         {
             get { return body.Position * unitToPixel; }
@@ -49,11 +49,7 @@ namespace PhysicsTileTest
         public DrawablePhysicsObject(World world, Vector2 size, float mass, bool isStatic)
         {
             body = BodyFactory.CreateRectangle(world, size.X * pixelToUnit, size.Y * pixelToUnit, 1);
-
-            if (isStatic)
-                body.BodyType = BodyType.Static;
-            else
-                body.BodyType = BodyType.Dynamic;
+            body.IsStatic = isStatic;
 
             this.Size = size;
         }
@@ -63,6 +59,7 @@ namespace PhysicsTileTest
         }
         public virtual void Update()
         {
+            // "Bounding Box"
             rectangle = new Rectangle
             (
                 (int)Position.X,

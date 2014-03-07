@@ -76,10 +76,10 @@ namespace PhysicsTileTest
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            map = new Map();
-
             graphics.ApplyChanges();
             this.IsMouseVisible = true;
+
+            map = new Map();
 
             base.Initialize();
         }
@@ -105,8 +105,6 @@ namespace PhysicsTileTest
             player.Position = new Vector2(100, 50);
 
             hp = Content.Load<Texture2D>("Hp");
-
-            player.bullet.Load(Content.Load<Texture2D>("Tile2"));
 
             speechBubble = Content.Load<Texture2D>("Speech");
             cloud = Content.Load<Texture2D>("Cloud0");
@@ -176,6 +174,8 @@ namespace PhysicsTileTest
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            // TODO: Add your update logic here
+
             prevMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();
             if (currentMouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
@@ -183,12 +183,12 @@ namespace PhysicsTileTest
                 Vector2 worldPosition = Vector2.Transform(new Vector2(currentMouseState.X, currentMouseState.Y), Matrix.Invert(camera.Transform));
                 SpawnCrate(worldPosition.X);
             }
-
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
                 SpawnBrick();
             }
 
+            // CD
             /*foreach (DrawablePhysicsObject tile in map.Tiles)
             {
                 tile.Update();
@@ -200,11 +200,7 @@ namespace PhysicsTileTest
             camera.Update(player.Position, map.Width, map.Height);
             cloudpos += new Vector2(0.2f, 0f);
 
-            Console.WriteLine(player.Position);
-
             world.Step((float)gameTime.ElapsedGameTime.TotalSeconds);
-
-            // TODO: Add your update logic here
 
             base.Update(gameTime);
         }
@@ -217,10 +213,12 @@ namespace PhysicsTileTest
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            // Background
             spriteBatch.Begin();
             spriteBatch.Draw(back, new Vector2(0, 0), Color.White);
             spriteBatch.End();
 
+            // Player,Crates etc.
             spriteBatch.Begin(SpriteSortMode.Deferred,
                               BlendState.AlphaBlend,
                               null, null, null, null,
@@ -236,6 +234,7 @@ namespace PhysicsTileTest
             spriteBatch.Draw(cloud, cloudpos, Color.White);
             spriteBatch.End();
 
+            // HUD
             spriteBatch.Begin();
             spriteBatch.Draw(hp, new Vector2(50, 30), Color.White);
             spriteBatch.End();

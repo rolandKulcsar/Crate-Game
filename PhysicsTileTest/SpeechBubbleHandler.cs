@@ -15,7 +15,6 @@ namespace PhysicsTileTest
         List<Texture2D> bubbles;
         List<float> positions;
         int bubbleNumber;
-        bool drawed;
 
         public Vector2 PlayerPosition
         {
@@ -31,7 +30,6 @@ namespace PhysicsTileTest
             positions = new List<float>(size);
             offset = new Vector2(-30, -100);
             bubbleNumber = 0;
-            drawed = false;
         }
 
         public void InitPositions()

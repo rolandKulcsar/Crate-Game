@@ -40,7 +40,7 @@ namespace PhysicsTileTest
 
                     if (number > 0)
                     {
-                       tiles.Add(new Tile(world, new Vector2(64.0f, 64.0f), 0.1f, true, new Vector2(x * size + 32, y * size + 32), number)); //65 és +25 volt
+                       tiles.Add(new Tile(world, new Vector2(64.0f, 64.0f), 0.1f, true, new Vector2(x * size + 32, y * size + 32), number)); 
                     }
 
                     width = (x + 1) * size;
