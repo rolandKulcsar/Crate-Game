@@ -21,10 +21,6 @@ namespace PhysicsTileTest
         private MouseState prevMouseState;
         private MouseState currentMouseState;
 
-        public List<DrawablePhysicsObject> Crates { get; set; }
-
-        public List<DrawablePhysicsObject> Bricks { get; set; }
-
         public CrateManager(World _world, int _mapWidth)
         {
             cratesAndBricks = new List<DrawablePhysicsObject>();
