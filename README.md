@@ -15,4 +15,13 @@ You can spawn crates with the Left Mouse Button.
 
 You can summon BrickShower with the Space key.
 
-Screenshot: http://i.imgur.com/qVQyhJt.png
+Screenshots: 
+
+[IMG]http://i.imgur.com/iynsnlh.png[/IMG]
+
+[IMG]http://i.imgur.com/NmebRFJ.png[/IMG]
+
+[IMG]http://i.imgur.com/84dDw8Z.png[/IMG]
+
+
+              
