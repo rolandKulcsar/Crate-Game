@@ -5,19 +5,19 @@ MonoGame and Farseer Physics Engine demo.
 
 Screenshots: 
 
-[IMG]http://i.imgur.com/iynsnlh.png[/IMG]
+http://i.imgur.com/iynsnlh.png
 
-[IMG]http://i.imgur.com/NmebRFJ.png[/IMG]
+http://i.imgur.com/NmebRFJ.png
 
-[IMG]http://i.imgur.com/84dDw8Z.png[/IMG]
+http://i.imgur.com/84dDw8Z.png
 
 To run you will need:
 
-1.)latest MonoGame: http://build.monogame.net/job/develop-win/lastSuccessfulBuild/artifact/Installers/Windows/
+1.) latest MonoGame: http://build.monogame.net/job/develop-win/lastSuccessfulBuild/artifact/Installers/Windows/
 
-2.)Farseer Physics Engine: https://farseerphysics.codeplex.com/
+2.) Farseer Physics Engine: https://farseerphysics.codeplex.com/
 
-3.)Windows
+3.) Windows
 
 W,A,D keys -> movement
 
