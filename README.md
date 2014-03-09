@@ -23,7 +23,6 @@ Screenshots:
 
 [IMG]http://i.imgur.com/84dDw8Z.png[/IMG]
 
-[URL=http://imgur.com/iynsnlh][IMG]http://i.imgur.com/iynsnlh.png[/IMG][/URL]
 
 
               
