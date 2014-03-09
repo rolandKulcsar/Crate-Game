@@ -13,9 +13,11 @@ Screenshots:
 
 To run you will need:
 
-Latest MonoGame: http://build.monogame.net/job/develop-win/lastSuccessfulBuild/artifact/Installers/Windows/
+1.)latest MonoGame: http://build.monogame.net/job/develop-win/lastSuccessfulBuild/artifact/Installers/Windows/
 
-Latest Farseer Physics Engine: https://farseerphysics.codeplex.com/
+2.)Farseer Physics Engine: https://farseerphysics.codeplex.com/
+
+3.)Windows
 
 W,A,D keys -> movement
 
