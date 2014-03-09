@@ -18,11 +18,11 @@ namespace PhysicsTileTest
         DateTime previousJump;
         KeyboardState prevKeyboardState;
 
-        public Player(World world, Vector2 size, float mass, bool isStatic) : base(world, size, mass, isStatic)
+        public Player(World world, Vector2 size, bool isStatic) : base(world, size, isStatic)
         {
             // próbálgatással beállított értékek
             movingImpulse = new Vector2(0.01f, 0f);
-            jumpingImpulse = new Vector2(0f, -2.5f);
+            jumpingImpulse = new Vector2(0f, -2.4f);
             movingVector = new Vector2(3.2f, 0f);
             previousJump = DateTime.Now;
             body.FixedRotation = true;

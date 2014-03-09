@@ -18,10 +18,18 @@ namespace PhysicsTileTest
             set { content = value; }
         }
 
-        public Tile(World world, Vector2 size, float mass, bool isStatic, Vector2 _position, int i) : base(world, size, mass, isStatic)
+        private int Id;
+
+        public int ID
+        {
+            get { return Id; }
+        }
+
+        public Tile(World world, Vector2 size, bool isStatic, Vector2 _position, int i) : base(world, size, isStatic)
         {
             texture = Content.Load<Texture2D>("Tile" + i);
             Position = _position;
+            Id = i;
         }
     }
 }

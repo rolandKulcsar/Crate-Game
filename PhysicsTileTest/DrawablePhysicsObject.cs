@@ -17,7 +17,6 @@ namespace PhysicsTileTest
         // I've chosen to use the rule that 100 pixels is one meter.
         // We have to take care to convert between these two 
         // coordinate-sets wherever we mix them!
-        
         protected const float unitToPixel = 100.0f;
         protected const float pixelToUnit = 1 / unitToPixel;
 
@@ -46,7 +45,8 @@ namespace PhysicsTileTest
         /// <param name="world">The farseer simulation this object should be part of</param>
         /// <param name="size">The size in pixels</param>
         /// <param name="mass">The mass in kilograms</param> 
-        public DrawablePhysicsObject(World world, Vector2 size, float mass, bool isStatic)
+        /// <param name="isStatic">The body is static or not</param> 
+        public DrawablePhysicsObject(World world, Vector2 size, bool isStatic)
         {
             body = BodyFactory.CreateRectangle(world, size.X * pixelToUnit, size.Y * pixelToUnit, 1);
             body.IsStatic = isStatic;
