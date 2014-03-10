@@ -13,7 +13,6 @@ using FarseerPhysics.Dynamics;
 // TODO
 // kör menüből lehet kiválasztani hogy milyen dobozt akarsz
 // eldöntéssel kell továbbjuttni
-// tileokból kirajzolni valamit
 // célba lőni a dobozokkal
 // paddle libikóka
 // dobozok esnek és előlük kell rohanni
@@ -44,6 +43,7 @@ namespace PhysicsTileTest
         CrateManager crateManager;
         HeadUpDisplay hud;
 
+        // Ezek a csúnyaságok csak teszt jelleggel vannak itt
         Texture2D back;
         Texture2D speechBubble;
         Texture2D cloud;
