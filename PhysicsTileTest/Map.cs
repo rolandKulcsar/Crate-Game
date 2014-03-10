@@ -47,6 +47,7 @@ namespace PhysicsTileTest
                     height = (y + 1) * size;
                 }
         }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (Tile tile in tiles)
