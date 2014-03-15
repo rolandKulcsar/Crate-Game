@@ -18,6 +18,7 @@ using FarseerPhysics.Dynamics;
 // dobozok esnek és előlük kell rohanni
 // ha doboz rádesik akkor sebződsz
 // low gravity
+// buttonból kivenni a graphicsot
 
 // Bubbles
 // what now?
@@ -47,7 +48,14 @@ namespace PhysicsTileTest
         Texture2D back;
         Texture2D speechBubble;
         Texture2D cloud;
+        Texture2D menu;
+        Button play;
         Vector2 cloudpos = new Vector2(50, 100);
+        Texture2D pauseTexture;
+        Button backButton;
+
+        enum GameState { Boot, Menu, Playing, Pause, GameOver };
+        GameState currentState;
 
         public Game1() : base()
         {
@@ -71,10 +79,14 @@ namespace PhysicsTileTest
             this.IsMouseVisible = true;
             this.Window.Title = "Crate Game";
 
+            currentState = GameState.Menu;
+
             world = new World(new Vector2(0, 9.81f));
             map = new Map();
             camera = new Camera(GraphicsDevice.Viewport);
             hud = new HeadUpDisplay();
+            play = new Button(graphics.GraphicsDevice);
+            backButton = new Button(graphics.GraphicsDevice);
 
             base.Initialize();
         }
@@ -100,6 +112,10 @@ namespace PhysicsTileTest
             back = Content.Load<Texture2D>("Background");
             speechBubble = Content.Load<Texture2D>("Speech");
             cloud = Content.Load<Texture2D>("Cloud0");
+            menu = Content.Load<Texture2D>("Menu");
+            play.Load(Content.Load<Texture2D>("Play"));
+            backButton.Load(Content.Load<Texture2D>("Back"));
+            pauseTexture = Content.Load<Texture2D>("Pause");
 
             map.Generate(new int[,]{
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -108,7 +124,7 @@ namespace PhysicsTileTest
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 2, 2, 2, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -142,12 +158,37 @@ namespace PhysicsTileTest
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            player.Update();
-            camera.Update(player.Position, map.Width, map.Height);
-            crateManager.Update(camera);
-            cloudpos += new Vector2(0.2f, 0f);
-
-            world.Step((float)gameTime.ElapsedGameTime.TotalSeconds);
+            switch(currentState)
+            {
+                case GameState.Menu :
+                    if (play.IsClicked)
+                        currentState = GameState.Playing;
+                    play.Update();
+                    break;
+                case GameState.Playing :
+                    player.Update();
+                    camera.Update(player.Position, map.Width, map.Height);
+                    crateManager.Update(camera);
+                    cloudpos += new Vector2(0.2f, 0f);
+                    world.Step((float)gameTime.ElapsedGameTime.TotalSeconds);
+                    foreach (Tile tile in map.Tiles)
+                    {
+                        if (tile.ID == 7)
+                        {
+                            tile.Update();
+                            if (player.Rectangle.Intersects(tile.Rectangle))
+                                currentState = GameState.GameOver;
+                        }
+                    }
+                    if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                        currentState = GameState.Pause;
+                    break;
+                case GameState.Pause :
+                    if (backButton.IsClicked)
+                        currentState = GameState.Playing;
+                    backButton.Update();
+                    break;
+            }
 
             base.Update(gameTime);
         }
@@ -158,30 +199,53 @@ namespace PhysicsTileTest
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.White);
 
-            // Background
-            spriteBatch.Begin();
-            spriteBatch.Draw(back, new Vector2(0, 0), Color.White);
-            spriteBatch.End();
+            switch (currentState)
+            {
+                case GameState.Menu:
+                    spriteBatch.Begin();
+                    spriteBatch.Draw(menu, new Vector2(0, 0), Color.White);
+                    play.Draw(spriteBatch);
+                    spriteBatch.End();
+                    break;
 
-            // Player,Crates etc.
-            spriteBatch.Begin(SpriteSortMode.Deferred,
-                              BlendState.AlphaBlend,
-                              null, null, null, null,
-                              camera.Transform);
-            crateManager.Draw(spriteBatch);
-            map.Draw(spriteBatch);
-            player.Draw(spriteBatch);
-            if(player.Position.X > 200 && player.Position.X < 250)
-                spriteBatch.Draw(speechBubble, player.Position + new Vector2(-30, -100), Color.White);
-            spriteBatch.Draw(cloud, cloudpos, Color.White);
-            spriteBatch.End();
+                case GameState.Playing:
+                    // Background
+                    spriteBatch.Begin();
+                    spriteBatch.Draw(back, new Vector2(0, 0), Color.White);
+                    spriteBatch.End();
 
-            // HUD
-            spriteBatch.Begin();
-            hud.Draw(spriteBatch);
-            spriteBatch.End();
+                    // Player,Crates etc.
+                    spriteBatch.Begin(SpriteSortMode.Deferred,
+                                      BlendState.AlphaBlend,
+                                      null, null, null, null,
+                                      camera.Transform);
+                    crateManager.Draw(spriteBatch);
+                    map.Draw(spriteBatch);
+                    player.Draw(spriteBatch);
+                    if (player.Position.X > 200 && player.Position.X < 250)
+                        spriteBatch.Draw(speechBubble, player.Position + new Vector2(-30, -100), Color.White);
+                    spriteBatch.Draw(cloud, cloudpos, Color.White);
+                    spriteBatch.End();
+
+                    // HUD
+                    spriteBatch.Begin();
+                    hud.Draw(spriteBatch);
+                    spriteBatch.End();
+                    break;
+
+                case GameState.Pause:
+                    spriteBatch.Begin();
+                    spriteBatch.Draw(pauseTexture, new Vector2(0, 0), Color.White);
+                    backButton.Draw(spriteBatch);
+                    spriteBatch.End();
+                    break;
+
+                case GameState.GameOver:
+                    Console.WriteLine("Game over");
+                    break;
+            }
 
             base.Draw(gameTime);
         }

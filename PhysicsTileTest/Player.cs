@@ -60,5 +60,10 @@ namespace PhysicsTileTest
 
             prevKeyboardState = keyboardState;
         }
+
+        public void Transform(Texture2D _texture)
+        {
+            texture = _texture;
+        }
     }
 }
