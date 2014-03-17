@@ -54,6 +54,7 @@ namespace PhysicsTileTest
         Texture2D menu;
         Button play;
         Vector2 cloudpos = new Vector2(50, 100);
+        Vector2 nullPosition = new Vector2(0, 0);
         Texture2D pauseTexture;
         Button backButton;
 
@@ -81,7 +82,7 @@ namespace PhysicsTileTest
             this.IsMouseVisible = true;
             this.Window.Title = "Crate Game";
 
-            currentState = GameState.Menu;
+            currentState = GameState.Splash;
 
             world = new World(new Vector2(0, 9.81f));
             map = new Map();
@@ -227,7 +228,7 @@ namespace PhysicsTileTest
 
                 case GameState.Menu:
                     spriteBatch.Begin();
-                    spriteBatch.Draw(menu, new Vector2(0, 0), Color.White);
+                    spriteBatch.Draw(menu, nullPosition, Color.White);
                     play.Draw(spriteBatch);
                     spriteBatch.End();
                     break;
@@ -235,7 +236,7 @@ namespace PhysicsTileTest
                 case GameState.Playing:
                     // Background
                     spriteBatch.Begin();
-                    spriteBatch.Draw(back, new Vector2(0, 0), Color.White);
+                    spriteBatch.Draw(back, nullPosition, Color.White);
                     spriteBatch.End();
 
                     // Player,Crates etc.
@@ -259,7 +260,7 @@ namespace PhysicsTileTest
 
                 case GameState.Pause:
                     spriteBatch.Begin();
-                    spriteBatch.Draw(pauseTexture, new Vector2(0, 0), Color.White);
+                    spriteBatch.Draw(pauseTexture, nullPosition, Color.White);
                     backButton.Draw(spriteBatch);
                     spriteBatch.End();
                     break;
