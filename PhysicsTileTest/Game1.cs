@@ -18,7 +18,7 @@ using FarseerPhysics.Dynamics;
 // dobozok esnek és előlük kell rohanni
 // ha doboz rádesik akkor sebződsz
 // low gravity
-// buttonból kivenni a graphicsot
+// sebződésnél pixel shader
 
 // Bubbles
 // what now?
@@ -29,6 +29,7 @@ using FarseerPhysics.Dynamics;
 // out of crates
 namespace PhysicsTileTest
 {
+    enum GameState { Splash, Menu, Playing, Pause, GameOver };
     /// <summary>
     /// This is the main type for your game
     /// </summary>
@@ -43,6 +44,8 @@ namespace PhysicsTileTest
         Player player;
         CrateManager crateManager;
         HeadUpDisplay hud;
+        PlayerBlocker playerBlocker;
+        SplashScreen splashScreen;
 
         // Ezek a csúnyaságok csak teszt jelleggel vannak itt
         Texture2D back;
@@ -54,7 +57,6 @@ namespace PhysicsTileTest
         Texture2D pauseTexture;
         Button backButton;
 
-        enum GameState { Boot, Menu, Playing, Pause, GameOver };
         GameState currentState;
 
         public Game1() : base()
@@ -87,6 +89,7 @@ namespace PhysicsTileTest
             hud = new HeadUpDisplay();
             play = new Button(graphics.GraphicsDevice);
             backButton = new Button(graphics.GraphicsDevice);
+            splashScreen = new SplashScreen();
 
             base.Initialize();
         }
@@ -116,6 +119,7 @@ namespace PhysicsTileTest
             play.Load(Content.Load<Texture2D>("Play"));
             backButton.Load(Content.Load<Texture2D>("Back"));
             pauseTexture = Content.Load<Texture2D>("Pause");
+            splashScreen.Load(Content);
 
             map.Generate(new int[,]{
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -124,7 +128,7 @@ namespace PhysicsTileTest
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 2, 2, 2, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -140,6 +144,7 @@ namespace PhysicsTileTest
             // csak a map felépítése után lehet létrehozni
             crateManager = new CrateManager(world, map.Width, hud);
             crateManager.Load(Content);
+            playerBlocker = new PlayerBlocker(player, map.Width);
         }
 
         /// <summary>
@@ -160,15 +165,23 @@ namespace PhysicsTileTest
         {
             switch(currentState)
             {
-                case GameState.Menu :
+                case GameState.Splash:
+                    splashScreen.Update(gameTime);
+                    if (splashScreen.end)
+                        currentState = GameState.Menu;
+                    break;
+
+                case GameState.Menu:
                     if (play.IsClicked)
                         currentState = GameState.Playing;
                     play.Update();
                     break;
-                case GameState.Playing :
+
+                case GameState.Playing:
                     player.Update();
                     camera.Update(player.Position, map.Width, map.Height);
                     crateManager.Update(camera);
+                    playerBlocker.Update();
                     cloudpos += new Vector2(0.2f, 0f);
                     world.Step((float)gameTime.ElapsedGameTime.TotalSeconds);
                     foreach (Tile tile in map.Tiles)
@@ -183,10 +196,15 @@ namespace PhysicsTileTest
                     if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                         currentState = GameState.Pause;
                     break;
-                case GameState.Pause :
+
+                case GameState.Pause:
                     if (backButton.IsClicked)
                         currentState = GameState.Playing;
                     backButton.Update();
+                    break;
+
+                case GameState.GameOver:
+                    Console.WriteLine("Game over");
                     break;
             }
 
@@ -203,6 +221,10 @@ namespace PhysicsTileTest
 
             switch (currentState)
             {
+                case GameState.Splash:
+                    splashScreen.Draw(spriteBatch);
+                    break;
+
                 case GameState.Menu:
                     spriteBatch.Begin();
                     spriteBatch.Draw(menu, new Vector2(0, 0), Color.White);
@@ -240,10 +262,6 @@ namespace PhysicsTileTest
                     spriteBatch.Draw(pauseTexture, new Vector2(0, 0), Color.White);
                     backButton.Draw(spriteBatch);
                     spriteBatch.End();
-                    break;
-
-                case GameState.GameOver:
-                    Console.WriteLine("Game over");
                     break;
             }
 

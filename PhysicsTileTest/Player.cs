@@ -30,6 +30,7 @@ namespace PhysicsTileTest
 
         public override void Update()
         {
+            // Bounding Box
             rectangle = new Rectangle
             (
                 (int)Position.X,
@@ -59,11 +60,6 @@ namespace PhysicsTileTest
             }
 
             prevKeyboardState = keyboardState;
-        }
-
-        public void Transform(Texture2D _texture)
-        {
-            texture = _texture;
         }
     }
 }

@@ -9,18 +9,20 @@ namespace PhysicsTileTest
     class PlayerBlocker
     {
         private int mapWidth;
+        private Player player;
 
-        public PlayerBlocker(int _mapWidth)
+        public PlayerBlocker(Player _player, int _mapWidth)
         {
+            player = _player;
             mapWidth = _mapWidth;
         }
 
-        public void Update(Vector2 playerPosition)
+        public void Update()
         {
-            if (playerPosition.X < 0)
-                playerPosition.X = 0;
-            if (playerPosition.X > mapWidth)
-                playerPosition.X = mapWidth;
+            if (player.Position.X < 0)
+                player.Position = new Vector2(0, player.Position.Y);
+            if (player.Position.X > mapWidth)
+                player.Position = new Vector2(mapWidth, player.Position.Y);
         }
     }
 }

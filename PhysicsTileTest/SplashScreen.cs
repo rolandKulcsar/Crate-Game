@@ -8,24 +8,30 @@ using System.Text;
 
 namespace PhysicsTileTest
 {
-    class LogoScreen
+    class SplashScreen
     {
         private ContentManager content;
-        private TimeSpan duration;
-        private Texture2D xnaLogo;
         private Texture2D farseerLogo;
         private Vector2 position;
-
-        public LogoScreen(TimeSpan _duration)
+        private Color color;
+        private TimeSpan duration;
+        public bool end
         {
-            duration = _duration;
+            get;
+            set;
+        }
+
+        public SplashScreen()
+        {
             position = new Vector2(0, 0);
+            color = new Color(255, 255, 255);
+            duration = new TimeSpan(0, 0, 2);
+            end = false;
         }
 
         public void Load(ContentManager _content)
         {
             content = _content;
-            xnaLogo = content.Load<Texture2D>("xna");
             farseerLogo = content.Load<Texture2D>("farseer");
         }
 
@@ -38,22 +44,23 @@ namespace PhysicsTileTest
         public void Update(GameTime gameTime)
         {
             duration -= gameTime.ElapsedGameTime;
-            if (duration <= TimeSpan.Zero)
-                ExitScreen();
-        }
 
-        public void ExitScreen()
-        {
+            if(duration <= TimeSpan.Zero)
+            {
+                color.R--;
+                color.G--;
+                color.B--;
+            }
+
+            if (color.R == 0 && color.G == 0 && color.B == 0)
+                end = true;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(xnaLogo, position, Color.White);
+            spriteBatch.Draw(farseerLogo, position, color);
             spriteBatch.End();
         }
-
-
-
     }
 }

@@ -45,13 +45,13 @@
     <Compile Include="DrawablePhysicsObject.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="HeadUpDisplay.cs" />
-    <Compile Include="LogoScreen.cs" />
+    <Compile Include="SplashScreen.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayerBlocker.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpeechBubbleHandler.cs" />
+    <Compile Include="SpeechBubbleManager.cs" />
     <Compile Include="Tile.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +78,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Crate.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\farseer.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Hp.png">

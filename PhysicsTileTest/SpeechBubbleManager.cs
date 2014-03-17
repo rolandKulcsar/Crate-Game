@@ -8,7 +8,7 @@ using System.Text;
 
 namespace PhysicsTileTest
 {
-    class SpeechBubbleHandler
+    class SpeechBubbleManager
     {
     }
 }
