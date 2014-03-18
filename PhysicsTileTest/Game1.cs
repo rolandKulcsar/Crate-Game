@@ -13,8 +13,6 @@ using FarseerPhysics.Dynamics;
 // TODO
 // kör menüből lehet kiválasztani hogy milyen dobozt akarsz
 // eldöntéssel kell továbbjuttni
-// célba lőni a dobozokkal
-// paddle libikóka
 // dobozok esnek és előlük kell rohanni
 // ha doboz rádesik akkor sebződsz
 // low gravity
@@ -46,17 +44,14 @@ namespace PhysicsTileTest
         HeadUpDisplay hud;
         PlayerBlocker playerBlocker;
         SplashScreen splashScreen;
+        MenuManager menuManager;
 
         // Ezek a csúnyaságok csak teszt jelleggel vannak itt
         Texture2D back;
         Texture2D speechBubble;
         Texture2D cloud;
-        Texture2D menu;
-        Button play;
         Vector2 cloudpos = new Vector2(50, 100);
-        Vector2 nullPosition = new Vector2(0, 0);
-        Texture2D pauseTexture;
-        Button backButton;
+        Vector2 nullPosition = Vector2.Zero;
 
         GameState currentState;
 
@@ -88,9 +83,8 @@ namespace PhysicsTileTest
             map = new Map();
             camera = new Camera(GraphicsDevice.Viewport);
             hud = new HeadUpDisplay();
-            play = new Button(graphics.GraphicsDevice);
-            backButton = new Button(graphics.GraphicsDevice);
             splashScreen = new SplashScreen();
+            menuManager = new MenuManager(graphics.GraphicsDevice);
 
             base.Initialize();
         }
@@ -116,11 +110,8 @@ namespace PhysicsTileTest
             back = Content.Load<Texture2D>("Background");
             speechBubble = Content.Load<Texture2D>("Speech");
             cloud = Content.Load<Texture2D>("Cloud0");
-            menu = Content.Load<Texture2D>("Menu");
-            play.Load(Content.Load<Texture2D>("Play"));
-            backButton.Load(Content.Load<Texture2D>("Back"));
-            pauseTexture = Content.Load<Texture2D>("Pause");
             splashScreen.Load(Content);
+            menuManager.Load(Content);
 
             map.Generate(new int[,]{
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -168,14 +159,14 @@ namespace PhysicsTileTest
             {
                 case GameState.Splash:
                     splashScreen.Update(gameTime);
-                    if (splashScreen.end)
+                    if (splashScreen.End)
                         currentState = GameState.Menu;
                     break;
 
                 case GameState.Menu:
-                    if (play.IsClicked)
+                    if (menuManager.PlayIsClicked())
                         currentState = GameState.Playing;
-                    play.Update();
+                    menuManager.UpdateMenu();
                     break;
 
                 case GameState.Playing:
@@ -199,9 +190,9 @@ namespace PhysicsTileTest
                     break;
 
                 case GameState.Pause:
-                    if (backButton.IsClicked)
+                    if (menuManager.BackIsClicked())
                         currentState = GameState.Playing;
-                    backButton.Update();
+                    menuManager.UpdatePause();
                     break;
 
                 case GameState.GameOver:
@@ -227,10 +218,7 @@ namespace PhysicsTileTest
                     break;
 
                 case GameState.Menu:
-                    spriteBatch.Begin();
-                    spriteBatch.Draw(menu, nullPosition, Color.White);
-                    play.Draw(spriteBatch);
-                    spriteBatch.End();
+                    menuManager.DrawMenuScreen(spriteBatch);
                     break;
 
                 case GameState.Playing:
@@ -253,16 +241,11 @@ namespace PhysicsTileTest
                     spriteBatch.End();
 
                     // HUD
-                    spriteBatch.Begin();
                     hud.Draw(spriteBatch);
-                    spriteBatch.End();
                     break;
 
                 case GameState.Pause:
-                    spriteBatch.Begin();
-                    spriteBatch.Draw(pauseTexture, nullPosition, Color.White);
-                    backButton.Draw(spriteBatch);
-                    spriteBatch.End();
+                    menuManager.DrawPauseScreen(spriteBatch);
                     break;
             }
 

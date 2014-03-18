@@ -29,8 +29,10 @@ namespace PhysicsTileTest
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            spriteBatch.Begin();
             spriteBatch.Draw(healthBar, healthBarPosition, health, Color.White);
             spriteBatch.Draw(manaBar, manaBarPosition, mana, Color.White);
+            spriteBatch.End();
         }
 
         public void DecreaseHealth(int amount)

@@ -12,10 +12,10 @@ namespace PhysicsTileTest
     {
         private ContentManager content;
         private Texture2D farseerLogo;
-        private Vector2 position;
+        private Vector2 nullVector;
         private Color color;
         private TimeSpan duration;
-        public bool end
+        public bool End
         {
             get;
             set;
@@ -23,10 +23,10 @@ namespace PhysicsTileTest
 
         public SplashScreen()
         {
-            position = new Vector2(0, 0);
+            nullVector = Vector2.Zero;
             color = new Color(255, 255, 255);
             duration = new TimeSpan(0, 0, 2);
-            end = false;
+            End = false;
         }
 
         public void Load(ContentManager _content)
@@ -53,13 +53,13 @@ namespace PhysicsTileTest
             }
 
             if (color.R == 0 && color.G == 0 && color.B == 0)
-                end = true;
+                End = true;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(farseerLogo, position, color);
+            spriteBatch.Draw(farseerLogo, nullVector, color);
             spriteBatch.End();
         }
     }
