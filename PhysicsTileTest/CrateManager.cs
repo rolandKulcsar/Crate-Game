@@ -21,6 +21,7 @@ namespace PhysicsTileTest
         private MouseState prevMouseState;
         private MouseState currentMouseState;
         private HeadUpDisplay hud;
+        private Player player;
 
         public CrateManager(World _world, int _mapWidth, HeadUpDisplay _hud)
         {
@@ -52,6 +53,12 @@ namespace PhysicsTileTest
             {
                 SpawnBrick();
             }
+        }
+
+        private void HandleDamage(DrawablePhysicsObject crate)
+        {
+            if (crate.Position.X > player.Position.X && crate.Position.X < player.Position.X + player.Rectangle.Width && crate.Position.Y <= player.Position.Y)
+                hud.DecreaseHealth(50);
         }
 
         private void SpawnBrick()

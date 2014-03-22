@@ -1,5 +1,7 @@
 ﻿using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -17,6 +19,7 @@ namespace PhysicsTileTest
         const float jumpInterval = 1f;
         DateTime previousJump;
         KeyboardState prevKeyboardState;
+        SoundEffect jumpEffect;
 
         public Player(World world, Vector2 size, bool isStatic) : base(world, size, isStatic)
         {
@@ -26,6 +29,12 @@ namespace PhysicsTileTest
             movingVector = new Vector2(3.2f, 0f);
             previousJump = DateTime.Now;
             body.FixedRotation = true;
+        }
+
+        public void Load(ContentManager Content)
+        {
+            texture = Content.Load<Texture2D>("Player1");
+            jumpEffect = Content.Load<SoundEffect>("Jump");
         }
 
         public override void Update()
@@ -54,6 +63,7 @@ namespace PhysicsTileTest
             {
                 if ((DateTime.Now - previousJump).TotalSeconds >= jumpInterval)
                 {
+                    jumpEffect.Play();
                     body.ApplyLinearImpulse(jumpingImpulse);
                     previousJump = DateTime.Now;
                 }
